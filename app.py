@@ -41,7 +41,7 @@ def init_db():
               username TEXT,
               tip_id INTEGER)''')
     c.execute('''CREATE TABLE IF NOT EXISTS liked_tips(id SERIAL PRIMARY KEY,
-              csername TEXT,
+              username TEXT,
               tip_id INTEGER)''')
     conn.commit()
     conn.close()
@@ -174,7 +174,7 @@ def logout():
     return redirect("/")
 
 @app.route("/contributions")
-def my_contributions(id):
+def my_contributions():
     if "user" not in session:
         return redirect("/login")
     username = session["user"]
@@ -278,12 +278,33 @@ def delete(id):
 @app.route("/like/<int:id>")
 def like(id):
 
-    conn=get_db()
-    c=conn.cursor()
+    if "user" not in session:
+        return redirect("/login")
+
+    conn = get_db()
+    c = conn.cursor()
+
+    c.execute(
+        "SELECT * FROM liked_tips WHERE username=%s AND tip_id=%s",
+        (session["user"], id)
+    )
+
+    already_liked = c.fetchone()
+
+    if already_liked:
+
+        conn.close()
+
+        return "You already liked this tip"
 
     c.execute(
         "UPDATE tips SET likes=likes+1 WHERE id=%s",
         (id,)
+    )
+
+    c.execute(
+        "INSERT INTO liked_tips(username, tip_id) VALUES(%s,%s)",
+        (session["user"], id)
     )
 
     conn.commit()
@@ -291,7 +312,7 @@ def like(id):
 
     return redirect("/")
 
-@app.route("/edit/<int:id>")
+@app.route("/edit/<int:id>", methods=["GET", "POST"])
 def edit(id):
     conn = get_db()
     c = conn.cursor()
@@ -302,7 +323,8 @@ def edit(id):
         description = request.form["description"]
         
         c.execute(
-            "UPDATE tips SET title=%s, WHERE id=%s",(title,description,id)
+            "UPDATE tips SET title=%s, description=%s WHERE id=%s",
+            (title,description,id)
         )
         
         conn.commit()
@@ -357,11 +379,12 @@ def comment(id):
     c = conn.cursor()
 
     c.execute(
-        "INSERT INTO comments(tip_id,username,comment) VALUES(%s,%s,%s)",
+        "INSERT INTO comments(tip_id,username,comment,created_at) VALUES(%s,%s,%s,%s)",
         (
             id,
             session["user"],
-            comment
+            comment,
+            datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         )
     )
 
@@ -481,21 +504,11 @@ def get_tips():
             "description": row[5],
             "urgency": row[6],
             "credibility": row[7],
-            "created_at": row[8]
+            "verified": row[8],
+            "likes": row[9],
+            "created_at": row[10]
         })
     return jsonify(tips)
-
-@app.route("/add_likes_column")
-def add_likes_column():
-    conn = get_db()
-    c = conn.cursor()
-    
-    c.execute("ALTER TABLE tips ADD COLUMN likes INTEGER DEFAULT 0")
-    
-    conn.commit()
-    conn.close()
-    
-    return "Likes column added"
 
 @app.errorhandler(404)
 def page_not_found(e):
