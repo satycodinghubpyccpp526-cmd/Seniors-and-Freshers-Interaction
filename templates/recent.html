@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Recent Activity</h1>
+        {% for tip in tips %}
+        <div class="card">
+            <h3>{{tip[4]}}</h3>
+            <p>{{tip[5]}}</p>
+            <p>By: {{tip[1]}}</p>
+            <p>{{tip[9]}}</p>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

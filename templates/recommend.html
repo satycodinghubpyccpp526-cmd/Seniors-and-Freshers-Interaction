@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Related Tips</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Recommend Tips for {{branch}}</h1>
+        {% for tip in tips %}
+        <div class="card">
+            <h3>{{tip[4]}}</h3>
+            <p>{{tip[5]}}</p>
+            <p><b>Senior:</b> {{tip[1]}}</p>
+            <p><b>College:</b> {{tip[2]}}</p>
+        </div>
+        {% endfor %}
+
+        <a href="/">
+            <button>Back</button>
+        </a>
+    </div>
+</body>
+</html>

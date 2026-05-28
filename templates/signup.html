@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <title>College Intelligence Platform</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    </head>
+    <h1>Signup</h1>
+    <form method="POST">
+        <input type="text" name="username" placeholder="Username" required>
+        <br><br>
+        <input type="password" name="password" placeholder="Password" required>
+        <br><br>
+        <select name = "role">
+            <option value="Senior">Senior</option>
+            <option value="Fresher">Fresher</option>
+            <option value="Admin">Admin</option>
+        </select>
+        <br><br>
+        <button>Signup</button>
+    </form>
+</html>

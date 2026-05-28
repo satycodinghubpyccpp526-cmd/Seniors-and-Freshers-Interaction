@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="container">
+
+<h1>Notifications</h1>
+
+{% for n in notifications %}
+
+<div class="card">
+
+{{n[2]}}
+
+</div>
+
+{% endfor %}
+
+<a href="/">
+<button>Back</button>
+</a>
+
+</div>
+
+</body>
+</html>
