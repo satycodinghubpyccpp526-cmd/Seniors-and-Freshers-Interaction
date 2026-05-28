@@ -3,13 +3,13 @@ import psycopg2
 import os
 from datetime import datetime
 
+app = Flask(__name__)
+app.secret_key="college_secret"
+
 DATABASE_URL = os.getenv("DATABASE_URL")
 def get_db():
     conn = psycopg2.connect(DATABASE_URL)
     return conn
-
-app = Flask(__name__)
-app.secret_key="college_secret"
 
 def init_db():
     conn = get_db()
