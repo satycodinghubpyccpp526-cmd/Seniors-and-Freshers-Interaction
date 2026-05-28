@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>College Intelligence Platform</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<script> function toggleDarkMode(){
+    document.body.classList.toggle("dark-mode");
+}
+</script>
+
+<body>
+
+    <div class="container">
+
+        <a href="/dashboard">
+            <button>Dashboard</button>
+        </a>
+        <a href="/saved">
+            <button>📰 Saved Tips</button>
+        </a>
+        <a onclick="toggleDarkMode()">
+            <button>🌙 Dark Mode</button>
+        </a>
+        <a href="/recent">
+            <button>🆕 Recent Activity</button>
+        </a>
+
+        <h1>College Intelligence Platform</h1>
+        {% if session.role=="Fresher" %}
+
+        <h3>🎓 Fresher Panel</h3>
+
+        {% elif session.role=="Senior" %}
+
+        <h3>👨‍🏫 Senior Panel</h3>
+
+        {% elif session.role=="Admin" %}
+
+        <h3>👑 Admin Panel</h3>
+
+        {% endif %}
+        <div class="stats">
+            <div class="stats-box">
+                <h3>{{total_tips}}</h3>
+                <p>Total Tips</p>
+            </div>
+            <div class="stats-box">
+                <h3>{{verified_tips}}</h3>
+                <p>Verified Tips</p>
+            </div>
+            <div class="stats-box">
+                <h3>{{total_users}}</h3>
+                <p>Total Users</p>
+            </div>
+        </div>
+
+        {% if session.user %}
+        <h3>Welcome {{session.user}}</h3>
+        <h3>Role:{{session.role}}</h3>
+        <a href="/logout">
+            <button>Logout</button>
+        </a>
+        <a href="/my_tips">
+            <button>📚 My Tips</button>
+        </a>
+        <a href="/notifications">
+            <button>🔔 Notifications</button>
+        </a>
+        <a href="/my_contributions">
+            <button>My Contributions 🏆</button>
+        </a>
+        {% endif %}
+        <a href="/signup">
+            <button>✍️ Signup</button>
+        </a>
+        <a href="/login">
+            <button>😍 Login</button>
+        </a>
+        <a href="/profile">
+            <button>🧑‍💼 Profile</button>
+        </a>
+        <form method = "GET">
+            <input type = "text" name = "college" placeholder = "College">
+            <input type = "text" name = "branch" placeholder = "Branch">
+            <select name="urgency">
+
+                <option>Low</option>
+                <option>Medium</option>
+                <option>High</option>
+
+            </select>
+
+            <button type="submit">🔎 Search</button>
+
+        </form>
+
+        <hr>
+        <form method="GET">
+
+            <input type="text" name="keyword" placeholder="Search Tips" required>
+
+            <button type="submit">🔎 Search</button>
+
+        </form>
+
+        <hr>
+
+        <form action="/add_tip" method="POST">
+
+            <input type="text" name="senior_name" placeholder="Senior Name" required>
+
+            <input type="text" name="college" placeholder="College" required>
+
+            <input type="text" name="branch" placeholder="Branch" required>
+
+            <input type="text" name="title" placeholder="Title" required>
+
+            <textarea name="description" placeholder="Description" required></textarea>
+
+            <select name="urgency">
+
+                <option>Low</option>
+                <option>Medium</option>
+                <option>High</option>
+
+            </select>
+
+            <button type="submit">➕ Add Tip</button>
+
+        </form>
+
+        <hr>
+
+        <h2>Latest Tips</h2>
+
+        {% for tip in tips %}
+
+        <div class="card">
+
+            <h3>{{ tip[4] }}</h3>
+
+            <p>{{ tip[5] }}</p>
+            
+            <p>
+                <b>Senior:</b>{{tip[1]}}
+            </p>
+            <p>
+                <b>College:</b>{{tip[2]}}
+            </p>
+            <p>
+                <b>Branch:</b>{{tip[3]}}
+            </p>
+            <p>
+                <b>Urgency:</b>{{tip[6]}}
+            </p>
+            <p>
+                <b>Credibility:</b>{{tip[7]}}
+            </p>
+            
+            <a href="/like/{{tip[0]}}">
+                <button>👍🏻 Like</button>
+            </a>
+            <p>
+                <b>Likes:</b> {{tip[9]}}
+            </p>
+
+            <a href="/bookmark/{{tip[0]}}">
+                <button>⭐ Save</button>
+            </a>
+            <a href="/recommend/{{tip[3]}}">
+                <button>Related Tips</button>
+            </a>
+            <a href="/verify/{{tip[0]}}">
+                <button>👌 Verify</button>
+            </a>
+            
+            {% if session.role=="Admin" %}
+            <a href="/delete/{{tip[0]}}">
+                <button>❎ Delete</button>
+            </a>
+            <a href="/edit/{{tip[0]}}">
+                <button>🖊️ Edit</button>
+            </a>
+            {% endif %}
+
+            <form action="/comment/{{tip[0]}}" method="POST">
+                <input type="text" name="comment" placeholder="Write comment">
+                <button type="submit">🗨️ Comment</button>
+            </form>
+            <h4>Comments:</h4>
+            {% for comment in comments %}
+                {% if comment[1] == tip[0] %}
+                    <p>
+                        <b>{{comment[2]}}</b>:
+                        {{comment[3]}}
+                        <br>
+                        <small>{{comment[4]}}</small>
+                    </p>
+                {% endif %}
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+
+</body>
+
+</html>
