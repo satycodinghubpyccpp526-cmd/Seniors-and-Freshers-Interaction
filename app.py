@@ -498,12 +498,12 @@ def ai():
         user_input = request.form["user_input"]
 
         response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
+            model="gpt-4.1-mini",
 
             messages=[
                 {
                     "role": "system",
-                    "content": "You are a career guidance AI for college students."
+                    "content": "You are a helpful career guidance AI for college students."
                 },
 
                 {
