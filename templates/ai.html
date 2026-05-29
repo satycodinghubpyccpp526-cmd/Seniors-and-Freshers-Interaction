@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>AI Career Guidance</title>
+
+    <link rel="stylesheet" href="/static/style.css">
+
+</head>
+
+<body>
+
+    <div class="ai-container">
+
+        <h1>AI Career Guidance 🤖</h1>
+
+        <form method="POST">
+
+            <textarea
+                name="user_input"
+                placeholder="Example: I am from ECE and interested in AI"
+                required
+            ></textarea>
+
+            <button type="submit">
+                Ask AI
+            </button>
+
+        </form>
+
+        {% if response %}
+
+        <div class="ai-response">
+
+            <h2>AI Response:</h2>
+
+            <p>{{ response }}</p>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</body>
+
+</html>
