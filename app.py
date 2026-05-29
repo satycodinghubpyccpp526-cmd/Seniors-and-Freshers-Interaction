@@ -2,9 +2,13 @@ from flask import Flask, render_template, request, redirect, jsonify, session
 import psycopg2
 import os
 from datetime import datetime
+from openai import OpenAI
 
 app = Flask(__name__)
 app.secret_key="college_secret"
+
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+client = OpenAI(api_key=OPENAI_API_KEY)
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 def get_db():
@@ -482,6 +486,38 @@ def dashboard():
         total_tips=total_tips,
         total_users=total_users,
         total_likes=total_likes,
+    )
+
+@app.route("/ai", methods=["GET", "POST"])
+def ai():
+
+    response_text = ""
+
+    if request.method == "POST":
+
+        user_input = request.form["user_input"]
+
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+
+            messages=[
+                {
+                    "role": "system",
+                    "content": "You are a career guidance AI for college students."
+                },
+
+                {
+                    "role": "user",
+                    "content": user_input
+                }
+            ]
+        )
+
+        response_text = response.choices[0].message.content
+
+    return render_template(
+        "ai.html",
+        response=response_text
     )
 
 @app.route("/tips", methods = ["GET"])
