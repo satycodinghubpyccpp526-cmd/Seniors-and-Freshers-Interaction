@@ -272,3 +272,16 @@ body.dark-mode .stats-box {
     line-height:1.8;
     white-space:pre-wrap;
 }
+.ai-btn{
+    background:#007bff;
+    color:white;
+    padding:12px 20px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    front-size:16px;
+    margin:10px;
+}
+.ai-btn:hover{
+    background:#0056b3;
+}
