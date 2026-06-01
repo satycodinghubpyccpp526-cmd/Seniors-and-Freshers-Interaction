@@ -11,6 +11,23 @@
 }
 </script>
 
+<script>const chats = [
+    ["👨‍🎓 Senior: DSA daily solve karo.",
+        "🧑‍💻 Fresher: Placement ke liye aur kya karu?"],
+    ["👨‍🎓 Senior: Projects GitHub par upload karo.",
+        "🧑‍💻 Fresher: Recruiters dekhte hain kya?"],
+    ["👨‍🎓 Senior: LinkedIn profile strong banao.",
+        "🧑‍💻 Fresher: Thanks bhaiya 😄"]
+];
+    let index = 0;
+    setInterval(()=>{document.querySelector(".senior").innerText = chats[index][0];
+    document.querySelector(".fresher").innerText = chats[index][1];
+    index++;
+                     if(index>=chats.length){index=0;
+                                            }
+                     },3000);
+</script>
+
 <body>
     <div class="hero">
         <h1>🚀 Seniors & Freshers Interaction</h1>
@@ -22,10 +39,19 @@
         <a href="/ai" class="hero-btn">
             Try AI Career Guide 🤖
         </a>
+        <div class="live-chat-demo">
+
+            <div class="chat senior">
+                👨‍🎓 Senior: DSA daily solve karo.
+            </div>
+
+            <div class="chat fresher">
+                🧑‍💻 Fresher: Placement ke liye aur kya karu?
+            </div>
+
+        </div>
     </div>
-
     <div class="container">
-
         <a href="/dashboard">
             <button>Dashboard</button>
         </a>
